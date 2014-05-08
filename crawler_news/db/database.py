@@ -1,19 +1,48 @@
 #!/usr/bin/env python
 #-*- coding:utf-8 -*-
 
+__author__ = 'liqing'
+
+from pymongo import Connection
+from bson.objectid import ObjectId
+from bson.errors import *
+from pymongo import ASCENDING, DESCENDING
+from pymongo.errors import *
+from util.log import logging
+
 class DB(object):
 
-  def __init__(self):
-    pass
+  _conn = None
+  _database = None
 
-  def insert_document(self):
-    pass
+  def __init__(self, Parameter):
+    """
+    mongodb连接
+    初始化
+    """
+    try:
+      self.__class__._conn = Connection(Parameter['host'], Parameter['port'])
+      self.__class__._database = self.__class__._conn[Parameter.get("file_db", "crawler_db")]
+    except Exception, e:
+      logging.critical('Failed to connect mongodb: %s' % (e) )
+      return None
 
-  def update_document(self):
-    pass
+  @property
+  def _db(self):
+    return self.__class__._database
 
-  def delete_document(self):
-    pass
+  def insert_document(self, collect_name, data):
+    _id = self._db[collect_name].insert(data)
+    return _id
 
-  def find_document(self):
-    pass
+  def update_document(self, collect_name, condition, data):
+    _id = self._db[collect_name].find_and_modify(query=condition, update=data, new=True)
+    return _id
+
+  def delete_document(self, collect_name, condition={}):
+    self._db[collect_name].remove(condition)
+
+
+  def find_document(self, collect_name, codition):
+    info = self._db[collect_name].find(condition)
+    return info
