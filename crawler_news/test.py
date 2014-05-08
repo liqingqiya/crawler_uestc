@@ -10,6 +10,7 @@ from bs4 import BeautifulSoup
 from util.log import logging
 from util import tool
 from config import URL
+from db.mongo import *
 import requests
 
 #从已经下载下来的html文件解析,并写入json文件
@@ -60,9 +61,16 @@ def read_all_news():
           print >>fi, "link", json_data["link"].encode("utf-8")
           print >>fi
 
+def start_mongo():
+  """
+  启动mongo数据库
+  """
+  insert_news({"d":1})
+
 if __name__=="__main__":
   # write()
   # read()
   # get_page()
   # get_fixed_page()
-  read_all_news()
+  #read_all_news()
+  start_mongo()

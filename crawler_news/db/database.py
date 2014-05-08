@@ -8,6 +8,7 @@ from bson.objectid import ObjectId
 from bson.errors import *
 from pymongo import ASCENDING, DESCENDING
 from pymongo.errors import *
+
 from util.log import logging
 
 class DB(object):
@@ -32,7 +33,9 @@ class DB(object):
     return self.__class__._database
 
   def insert_document(self, collect_name, data):
+    logging.info("enter insert_document...")
     _id = self._db[collect_name].insert(data)
+    logging.info("leaveing insert_document...")
     return _id
 
   def update_document(self, collect_name, condition, data):
