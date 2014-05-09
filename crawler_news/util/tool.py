@@ -4,11 +4,15 @@
 import json
 import tempfile
 import re
+import time
+import os.path
 import requests
 
 from bs4 import BeautifulSoup
 
 from config import URL
+from log import logging
+from db import mongo
 
 def get_last_web_page_number():
   """
@@ -47,6 +51,11 @@ def get_web_page_by_url(url):
   #这里需要进行utf-8编码
   return soup.prettify().encode("utf-8")
 
+def strip_space(string):
+  """
+  去掉字符串两端空白字符
+  """
+  return string.strip()
 
 def load_and_parse(page):
   """
@@ -56,10 +65,68 @@ def load_and_parse(page):
   """
   soup = BeautifulSoup(page)
   news_list = soup.find("div", id="AbroadStudy_menu")
-  result = news_list.find_all("a", attrs={"target":"_blank","href":True})
+  #result = news_list.find_all("a", attrs={"target":"_blank","href":True})
+  result = news_list.find_all("div", attrs={"class":"AbroadStudy_title clear"})
   for item in result:
-    json_data = json.dumps(dict(title=item["title"], link=item["href"]))
+    json_data = json.dumps(dict(
+      title=item.div.h6.a["title"],
+      link=item.div.h6.a["href"],
+      datetime=strip_space(string=item.div.p.span.get_text())
+    ))
     yield json_data
+
+def write_to_json_file():
+  """
+  爬虫数据写入json文件,
+  而不是直接写入数据库
+  """
+  logging.info("enter write_to_json_file...")
+  #获得最大页数，确定爬虫范围
+  last_page_number = get_last_web_page_number()
+  #打开文件
+  current_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir))+"/json"
+  yyyy = time.strftime("%Y")
+  mm = time.strftime("%m")
+  dd = time.strftime("%d")
+  folder = os.path.join(current_dir, yyyy, mm, dd)
+  if not os.path.exists(folder):
+    os.makedirs(folder)
+  os.chdir(folder)
+
+  logging.debug("max page is :%s"%last_page_number)
+  for i in range(1,last_page_number+1):
+    with open("news_%s.json"%i, "w+") as news:
+      #获取页面
+      page = get_web_page_by_url(URL.format(page_number=i))
+      #解析
+      for item_json_data in load_and_parse(page):
+        #写入文件
+        news.write(item_json_data+"\n")
+
+  logging.info("leaving write_to_json_file...")
+
+def write_to_mongo_db():
+  """
+  爬虫数据写入json文件,
+  而不是直接写入数据库
+  """
+  logging.info("enter write_mongo_db")
+
+  #获得最大页数，确定爬虫范围
+  last_page_number = get_last_web_page_number()
+
+  logging.debug("max page is :%s"%last_page_number)
+  for i in range(1,last_page_number+1):
+    #获取页面
+    page = get_web_page_by_url(URL.format(page_number=i))
+    #解析页面
+    for item_raw_str in load_and_parse(page):
+      #写入mongo数据库
+      item_json_data = json.loads(item_raw_str)
+      mongo.insert_news(item_json_data)
+
+  logging.info("leaving write_to_mongo_db")
+
 
 if __name__ == "__main__":
   pass

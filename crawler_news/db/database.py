@@ -33,7 +33,11 @@ class DB(object):
     return self.__class__._database
 
   def insert_document(self, collect_name, data):
+    """
+    data必须是一个json数据 | 字典
+    """
     logging.info("enter insert_document...")
+    logging.info("data:%s"%data)
     _id = self._db[collect_name].insert(data)
     logging.info("leaveing insert_document...")
     return _id

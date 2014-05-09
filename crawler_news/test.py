@@ -1,17 +1,25 @@
 #!/usr/bin/env python
 #-*- coding:utf-8 -*-
 
+"""
+这个文件用来测试
+"""
+
+
 __author__ = 'liqing'
 
 import json
 import os
 
+import requests
 from bs4 import BeautifulSoup
+
+from db import mongo
 from util.log import logging
 from util import tool
 from config import URL
-from db.mongo import *
-import requests
+
+
 
 #从已经下载下来的html文件解析,并写入json文件
 def write():
@@ -50,27 +58,41 @@ def get_fixed_page():
     fi.write(page)
 
 def read_all_news():
-  current_folder = os.path.dirname(__file__)
-  os.chdir(os.path.join(current_folder,"2014/05/07"))
-  with open("news.txt","a+") as fi:
-    for i in xrange(1,12):
-      with open("news_%s.json"%i,"r") as news:
-        for line in news:
-          json_data = json.loads(line)
-          print >>fi, "title", json_data["title"].encode("utf-8")
-          print >>fi, "link", json_data["link"].encode("utf-8")
-          print >>fi
+  logging.info("enter read_all_news...")
+  logging.info("__file__ is :%s"%__file__)
+  current_folder = os.path.abspath(os.path.dirname(__file__))
+  logging.info("current_folder is %s"%current_folder)
+  to_folder = os.path.join(current_folder, "json/2014/05/09")
+  logging.info(to_folder)
+  os.chdir(to_folder)
+  ii = 0
+  for i in xrange(1,12):
+    with open("news_%s.json"%i,"r") as news:
+      for line in news:
+        json_data = json.loads(line)
+        # print "title", json_data["title"].encode("utf-8")
+        # print "link", json_data["link"].encode("utf-8")
+        # print "datetime", json_data["datetime"].encode("utf-8")
+        ii += 1
+  print "number is :", ii
+  logging.info("leaving read_all_news...")
 
 def start_mongo():
   """
   启动mongo数据库
   """
-  insert_news({"d":1})
+  current_folder = os.path.dirname(__file__)
+  os.chdir(os.path.join(current_folder, "json/2014/05/09"))
+  for i in xrange(1,12):
+    with open("news_%s.json"%i, "r") as news:
+      for line in news:
+        json_data = json.loads(line)
+        mongo.insert_news(json_data)
 
 if __name__=="__main__":
   # write()
   # read()
   # get_page()
   # get_fixed_page()
-  #read_all_news()
-  start_mongo()
+  # read_all_news()
+  # start_mongo()
