@@ -3,7 +3,7 @@
 
 __author__ = 'liqing'
 
-from database import DB
+from mongo_backend import DB
 
 #数据库配置
 DATABASE_SETTINGS = {
@@ -13,4 +13,4 @@ DATABASE_SETTINGS = {
   "max_pool_size":10,
 }
 
-mongodb = DB(DATABASE_SETTINGS)
+mongo_backend = DB(DATABASE_SETTINGS)

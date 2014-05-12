@@ -14,7 +14,7 @@ import os
 import requests
 from bs4 import BeautifulSoup
 
-from db import mongo
+from db import mongo_interface
 from util.log import logging
 from util import tool
 from config import URL
@@ -87,7 +87,7 @@ def start_mongo():
     with open("news_%s.json"%i, "r") as news:
       for line in news:
         json_data = json.loads(line)
-        mongo.insert_news(json_data)
+        mongo_interface.insert_news(json_data)
 
 if __name__=="__main__":
   # write()

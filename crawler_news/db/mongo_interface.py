@@ -4,15 +4,15 @@
 __author__ = 'liqing'
 
 from util.log import logging
-from setting import mongodb
+from setting import mongo_backend
 
 """
-mongodb逻辑操作
+mongo_backend逻辑操作
 """
 def insert_news(news_dict):
   logging.info("enter insert_news...")
   logging.info("leaving insert_news...")
-  return mongodb.insert_document("news", news_dict)
+  return mongo_backend.insert_document("news", news_dict)
 
 def update_news_by_id(news_id, news_dict):
   """
@@ -20,14 +20,14 @@ def update_news_by_id(news_id, news_dict):
   """
   logging.info("enter update_news_by_id...")
   logging.info("leave update_news_by_id...")
-  return update_document({"_id":news_id}, new_dict)
+  return mongo_backend.update_document({"_id":news_id}, new_dict)
 
 def delete_news_by_id(news_id):
   """
   根据id号删除文档
   """
   logging.info("enter delete_news_by_id...")
-  mongodb.delete_document({"_id":news_id})
+  mongo_backend.delete_document({"_id":news_id})
   logging.info("leave delete_news_by_id...")
 
 def delete_news_by_datetime(datetime):
@@ -35,7 +35,7 @@ def delete_news_by_datetime(datetime):
   根据时间,来删除新闻
   """
   logging.info("enter delete_news_by_datetime...")
-  mongodb.delete_document({"datetime":datetime})
+  mongo_backend.delete_document({"datetime":datetime})
   logging.info("leave delete_news_by_datetime...")
 
 def find_news_by_datetime(datetime):
@@ -44,7 +44,7 @@ def find_news_by_datetime(datetime):
   """
   logging.info("enter find_news_by_datetime...")
   logging.info("leave find_news_by_datetime...")
-  return mongodb.find_document(collect_name="news", condition={"datetime":datetime})
+  return mongo_backend.find_document(collect_name="news", condition={"datetime":datetime})
 
 def find_news_by_id(news_id):
   """
@@ -52,7 +52,7 @@ def find_news_by_id(news_id):
   """
   logging.info("enter find_news_by_id...")
   logging.info("enter find_news_by_id...")
-  return mongodb.find_one_document("news", condition={"_id":news_id})
+  return mongo_backend.find_one_document("news", condition={"_id":news_id})
 
 if __name__ == "__main__":
   pass

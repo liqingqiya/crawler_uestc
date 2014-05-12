@@ -12,7 +12,7 @@ from bs4 import BeautifulSoup
 
 from config import URL
 from log import logging
-from db import mongo
+from db import mongo_interface
 
 def get_last_web_page_number():
   """
@@ -71,7 +71,8 @@ def load_and_parse(page):
     json_data = json.dumps(dict(
       title=item.div.h6.a["title"],
       link=item.div.h6.a["href"],
-      datetime=strip_space(string=item.div.p.span.get_text())
+      datetime=strip_space(string=item.div.p.span.get_text()),
+      download_time=time.time()
     ))
     yield json_data
 
@@ -123,7 +124,7 @@ def write_to_mongo_db():
     for item_raw_str in load_and_parse(page):
       #写入mongo数据库
       item_json_data = json.loads(item_raw_str)
-      mongo.insert_news(item_json_data)
+      mongo_interface.insert_news(item_json_data)
 
   logging.info("leaving write_to_mongo_db")
 

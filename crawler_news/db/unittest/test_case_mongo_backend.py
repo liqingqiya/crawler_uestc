@@ -23,6 +23,10 @@ class TestDatabase(unittest.TestCase):
       print i
     #print list(ret)
     #print ret[0]
+  def test_find_one_document(self):
+  def test_insert_document(self):
+  def test_update_document(self):
+  def test_delete_document(self):
 
 if __name__ == "__main__":
   unittest.main()
