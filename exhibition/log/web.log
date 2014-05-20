@@ -1,0 +1,23 @@
+[I 140520 23:26:11 autoreload:191] /home/liqing/Dropbox/uestc/crawler_uestc/exhibition/config.py modified; restarting server
+[I 140520 23:26:18 index:18] entering IndexHandler...get
+[I 140520 23:26:19 web:1728] 200 GET / (::1) 11.58ms
+[I 140520 23:26:19 index:20] leaving IndexHandler...get
+[I 140520 23:26:47 index:18] entering IndexHandler...get
+[I 140520 23:26:47 web:1728] 200 GET / (::1) 6.45ms
+[I 140520 23:26:47 index:20] leaving IndexHandler...get
+[I 140520 23:31:01 application:37] start server...
+[I 140520 23:31:13 index:18] entering IndexHandler...get
+[I 140520 23:31:13 web:1728] 200 GET / (::1) 4.21ms
+[I 140520 23:31:13 index:20] leaving IndexHandler...get
+[I 140520 23:32:12 index:18] entering IndexHandler...get
+[I 140520 23:32:12 web:1728] 200 GET / (::1) 3.11ms
+[I 140520 23:32:12 index:20] leaving IndexHandler...get
+[I 140520 23:33:01 autoreload:191] application.py modified; restarting server
+[I 140520 23:33:01 application:38] start server...
+[I 140520 23:34:53 autoreload:191] application.py modified; restarting server
+[I 140520 23:34:53 application:40] start server...
+[I 140520 23:34:59 application:40] start server...
+[I 140520 23:35:31 index:18] entering IndexHandler...get
+[I 140520 23:35:31 web:1728] 200 GET / (::1) 8.14ms
+[I 140520 23:35:31 index:20] leaving IndexHandler...get
+[I 140520 23:36:30 autoreload:191] application.py modified; restarting server

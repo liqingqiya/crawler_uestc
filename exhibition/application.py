@@ -25,21 +25,26 @@ class Application(tornado.web.Application):
         template_path = config.TEMPLATE_PATH, 
         static_path = config.STATIC_PATH,
         site_path = config.SITE_PATH,
+        autoescape = None,
         debug = True
         )
     super(Application, self).__init__(routing, **settings)
 
 def start():
-  options.log_file_prefix = config.LOG_FILE
+  #options.log_file_prefix = config.LOG_FILE  #set log file
   tornado.options.options.logging = "debug"
   tornado.options.parse_command_line()
-  application = Application()
+  try:
+    application = Application()
 
-  logging.info("start server...")
+    logging.info("start server...")
 
-  httpserver = tornado.httpserver.HTTPServer(application)
-  httpserver.listen(options.port)
-  tornado.ioloop.IOLoop.instance().start()
+    httpserver = tornado.httpserver.HTTPServer(application)
+    httpserver.listen(options.port)
+    tornado.ioloop.IOLoop.instance().start()
+  except Exception,e:
+    logging.critical("start failed!")
+    logging.error("%s"%str(e))
 
 if __name__ == "__main__":
   start()

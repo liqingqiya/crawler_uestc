@@ -5,7 +5,10 @@ __author__ = 'liqing'
 
 import logging
 
-FORMAT = "%(levelname)s: %(asctime)-15s %(message)s"
+FORMAT = "%(name)s:%(levelname)s:%(module)s:%(lineno)d:%(message)s"
 
 logging.basicConfig(format=FORMAT, level = logging.DEBUG)
 
+
+if __name__ == "__main__":
+  logging.info("just a test message")

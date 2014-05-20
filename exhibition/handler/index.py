@@ -11,13 +11,12 @@ class IndexHandler(tornado.web.RequestHandler):
   """
   TODO
   """
-
   def get(self):
     """
     TODO
     """
     logging.info("entering IndexHandler...get")
-    self.render_string("index.html") 
+    self.render("index.html") 
     logging.info("leaving IndexHandler...get")
 
   def post(self):
