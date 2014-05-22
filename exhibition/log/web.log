@@ -21,3 +21,4 @@
 [I 140520 23:35:31 web:1728] 200 GET / (::1) 8.14ms
 [I 140520 23:35:31 index:20] leaving IndexHandler...get
 [I 140520 23:36:30 autoreload:191] application.py modified; restarting server
+[I 140522 00:17:39 application:40] start server...
